@@ -1,0 +1,28 @@
+name: publish
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Build
+        run: ./build.sh
+
+
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: publish/
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
